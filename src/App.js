@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { Provider } from "react-firebase";
-import { initializeApp } from "firebase";
+import { Provider } from "react-firebase-firestore";
+// Required for side-effects
+import firebase, { initializeApp } from "firebase";
 import logo from "./logo.svg";
 import "./App.css";
 
 import Main from "./component/Main";
 
+require("firebase/firestore");
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyDVGfxKgd9WdGzR_dMxlG59YOsQ0oh_ryk",
   authDomain: "firebug-planner-7ec61.firebaseapp.com",
@@ -14,6 +16,7 @@ const firebaseApp = initializeApp({
   storageBucket: "firebug-planner-7ec61.appspot.com",
   messagingSenderId: "887774219647"
 });
+const firestore = firebase.firestore();
 
 class App extends Component {
   render() {
@@ -23,7 +26,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <Provider firebaseApp={firebaseApp}>
+        <Provider firebaseApp={firebaseApp} firestore={firestore}>
           <Main />
         </Provider>
       </div>
