@@ -4,11 +4,21 @@ import TodoList from "./TodoList";
 import "./Main.css";
 
 import Calendar from "./Calendar";
+import Routine from "./Routine";
 class Main extends Component {
   render() {
     return (
       <div className="layout4">
-        <div>Routines</div>
+        <div>
+          <div>
+            Monthly Routines
+            <Routine isMonthly={true} />
+          </div>
+          <div>
+            Weekly Routines
+            <Routine isMonthly={false} />
+          </div>
+        </div>
         <div>
           Notes
           <TodoList />
