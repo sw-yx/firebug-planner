@@ -6,3 +6,5 @@ videos
   * Firebug 0 raw rehearsal https://www.youtube.com/watch?v=wZaFOfoCxjY
 * Firebug 1 https://www.youtube.com/watch?v=qqqmlWxcfcs
   * Firebug 1 raw rehearsal https://www.youtube.com/watch?v=7oaGs7hTev8
+* Firebug 2 https://www.youtube.com/watch?v=MYVtfojlvdc
+  * Firebug 2 raw rehearsal https://www.youtube.com/watch?v=nvG8zm6cnfc
