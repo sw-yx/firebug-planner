@@ -2,6 +2,8 @@ import React, { Component } from "react";
 
 import { connect } from "react-firebase-firestore";
 
+import { CurrentDateContext } from "../CurrentDate";
+
 function compareDates(a, b) {
   return a && a.toISOString().slice(0, 10) === b.toISOString().slice(0, 10);
 }
@@ -80,4 +82,11 @@ const mapPropstoFirebase = (props, ref) => ({
     })
 });
 
-export default connect(mapPropstoFirebase)(TodoList);
+export default props => {
+  const HOC = connect(mapPropstoFirebase)(TodoList);
+  return (
+    <CurrentDateContext>
+      {({ state }) => <HOC currentDate={state.currentDate} {...props} />}
+    </CurrentDateContext>
+  );
+};
