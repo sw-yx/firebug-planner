@@ -6,25 +6,30 @@ import "./Main.css";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+
+import { DateContext } from "../CurrentDate";
+import Routine from "./Routine";
 class Main extends Component {
   render() {
-    const { currentDate, handleDateChange } = this.props;
     return (
       <div className="layout4">
-        <div>Routines</div>
+        <div>
+          Routines
+          <Routine />
+        </div>
         <div>
           Notes
-          <TodoList currentDate={currentDate} />
+          <TodoList />
         </div>
         <div>
           Backlog
-          <TodoList currentDate={currentDate} isBacklog />
+          <TodoList isBacklog />
         </div>
         <div>
-          Calendar<DatePicker
-            selected={currentDate}
-            onChange={handleDateChange}
-          />
+          Calendar
+          <DateContext.Consumer>
+            {context => <DatePicker selected={context.state.currentDate} onChange={context.handleDateChange} />}
+          </DateContext.Consumer>
         </div>
       </div>
     );

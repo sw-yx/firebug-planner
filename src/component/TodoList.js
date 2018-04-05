@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import { connect } from "react-firebase-firestore";
 
+import { DateContext } from "../CurrentDate";
 function compareDates(a, b) {
   return a && a.toISOString().slice(0, 10) === b.toISOString().slice(0, 10);
 }
@@ -13,15 +14,7 @@ class TodoList extends Component {
     e.target.newTodo.value = "";
   };
   render() {
-    const {
-      value,
-      todos,
-      currentDate,
-      isBacklog,
-      deleteTodo,
-      toggleBacklog,
-      checkItem
-    } = this.props;
+    const { value, todos, currentDate, isBacklog, deleteTodo, toggleBacklog, checkItem } = this.props;
     return (
       <div>
         <p className="App-intro">{value}</p>
@@ -41,14 +34,11 @@ class TodoList extends Component {
                     <input
                       type="checkbox"
                       checked={item.isComplete}
-                      onClick={() => checkItem(key, !item.isComplete)}
+                      onChange={() => checkItem(key, !item.isComplete)}
                     />
                     {item.text}
                     <span onClick={() => deleteTodo(key)}> X</span> |
-                    <span onClick={() => toggleBacklog(key)}>
-                      {" "}
-                      {isBacklog ? "⬅️" : "👉"}
-                    </span>
+                    <span onClick={() => toggleBacklog(key)}> {isBacklog ? "⬅️" : "👉"}</span>
                   </li>
                 );
               })}
@@ -80,4 +70,12 @@ const mapPropstoFirebase = (props, ref) => ({
     })
 });
 
-export default connect(mapPropstoFirebase)(TodoList);
+export default props => (
+  <DateContext.Consumer>
+    {context => {
+      const { currentDate } = context.state;
+      const TodoListContainer = connect(mapPropstoFirebase)(TodoList);
+      return <TodoListContainer currentDate={currentDate} {...props} />;
+    }}
+  </DateContext.Consumer>
+);

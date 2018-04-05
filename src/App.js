@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Provider } from "react-firebase-firestore";
 import { initializeApp } from "firebase";
 import "./App.css";
-import moment from "moment";
 
 import Main from "./component/Main";
+import DateProvider, { DateContext } from "./CurrentDate";
 
 var firebase = require("firebase");
 // Required for side-effects
@@ -21,30 +21,25 @@ const firebaseApp = initializeApp({
 const firestore = firebase.firestore();
 
 class App extends Component {
-  state = {
-    currentDate: moment()
-  };
-  handleDateChange = date => {
-    this.setState({
-      currentDate: date
-    });
-  };
   render() {
-    const { currentDate } = this.state;
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">
-            today is {currentDate.toDate().toDateString()}
-          </h1>
-        </header>
+      <DateProvider>
         <Provider firebaseApp={firebaseApp} firestore={firestore}>
-          <Main
-            currentDate={currentDate}
-            handleDateChange={this.handleDateChange}
-          />
+          <div className="App">
+            <header className="App-header">
+              <h1 className="App-title">
+                <DateContext.Consumer>
+                  {context => {
+                    const { currentDate } = context.state;
+                    return `today is ${currentDate.toDate().toDateString()}`;
+                  }}
+                </DateContext.Consumer>
+              </h1>
+            </header>
+            <Main />;
+          </div>
         </Provider>
-      </div>
+      </DateProvider>
     );
   }
 }
