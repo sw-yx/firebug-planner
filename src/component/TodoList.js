@@ -43,7 +43,7 @@ class TodoList extends Component {
                     <input
                       type="checkbox"
                       checked={item.isComplete}
-                      onClick={() => checkItem(key, !item.isComplete)}
+                      onChange={() => checkItem(key, !item.isComplete)}
                     />
                     {item.text}
                     <span onClick={() => deleteTodo(key)}> X</span> |
