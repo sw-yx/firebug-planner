@@ -1,0 +1,17 @@
+.Button {
+  width: auto;
+  overflow: visible;
+  position: relative;
+  text-transform: uppercase;
+  color: rgb(102, 102, 102);
+  font: inherit inherit inherit inherit inherit inherit inherit inherit;
+  background: rgb(238, 238, 238);
+  border-radius: 0px;
+  border-width: initial;
+  border-style: none;
+  border-color: initial;
+  border-image: initial;
+  margin: 10px;
+  padding: 10px;
+  flex: 1 1 0%;
+}

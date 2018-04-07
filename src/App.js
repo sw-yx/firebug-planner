@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Provider } from "react-firebase-firestore";
 import { initializeApp } from "firebase";
 import "./App.css";
@@ -19,6 +19,18 @@ const firebaseApp = initializeApp({
 });
 const firestore = firebase.firestore();
 
+class Timer extends Component {
+  state = {
+    now: new Date()
+  };
+  componentDidMount() {
+    setInterval(() => this.setState({ now: new Date() }), 1000);
+  }
+  render() {
+    return this.state.now.toLocaleTimeString();
+  }
+}
+
 class App extends Component {
   render() {
     return (
@@ -26,13 +38,22 @@ class App extends Component {
         <CurrentDateProvider>
           <div className="App">
             <header className="App-header">
-              <h1 className="App-title">
+              <span>
+                <div>AUTH</div>
                 <CurrentDateContext>
-                  {({ state, handleDateChange }) =>
-                    `today is ${state.currentDate.toDate().toDateString()}`
-                  }
+                  {({ setToday }) => (
+                    <Fragment>
+                      <button onClick={setToday}>Today</button>: <Timer />
+                    </Fragment>
+                  )}
                 </CurrentDateContext>
-              </h1>
+              </span>
+              <div className="App-title">
+                <CurrentDateContext>
+                  {({ state, handleDateChange }) => `today is ${state.currentDate.toDate().toDateString()}`}
+                </CurrentDateContext>
+              </div>
+              <span className="searchbar">searchbar | Impport/Export DB</span>
             </header>
             <Main />
           </div>

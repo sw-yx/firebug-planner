@@ -1,0 +1,11 @@
+.RoutineItem {
+  flex: 1;
+  display: flex;
+}
+.RoutineItem > div {
+  flex: 1;
+  outline: none;
+}
+.RoutineItem svg {
+  color: rgb(170, 170, 170);
+}

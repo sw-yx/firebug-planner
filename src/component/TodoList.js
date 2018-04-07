@@ -8,6 +8,36 @@ function compareDates(a, b) {
   return a && a.toISOString().slice(0, 10) === b.toISOString().slice(0, 10);
 }
 
+const PointLeft = () => (
+  <svg
+    fill="currentColor"
+    preserveAspectRatio="xMidYMid meet"
+    height="1em"
+    width="1em"
+    viewBox="0 0 40 40"
+    style={{ "vertical-align": "middle" }}
+  >
+    <g>
+      <path d="m0 32.5h7.5v-25h-7.5v25z m27.5-17.5v-7.5l-15 12.5 15 12.5v-7.5h12.5v-10h-12.5z" />
+    </g>
+  </svg>
+);
+
+const PointRight = () => (
+  <svg
+    fill="currentColor"
+    preserveAspectRatio="xMidYMid meet"
+    height="1em"
+    width="1em"
+    viewBox="0 0 40 40"
+    style={{ "vertical-align": "middle" }}
+  >
+    <g>
+      <path d="m32.5 7.5v25h7.5v-25h-7.5z m-20 7.5h-12.5v10h12.5v7.5l15-12.5-15-12.5v7.5z" />
+    </g>
+  </svg>
+);
+
 class TodoList extends Component {
   handleSubmit = e => {
     e.preventDefault();
@@ -15,15 +45,7 @@ class TodoList extends Component {
     e.target.newTodo.value = "";
   };
   render() {
-    const {
-      value,
-      todos,
-      currentDate,
-      isBacklog,
-      deleteTodo,
-      toggleBacklog,
-      checkItem
-    } = this.props;
+    const { value, todos, currentDate, isBacklog, deleteTodo, toggleBacklog, checkItem } = this.props;
     return (
       <div>
         <p className="App-intro">{value}</p>
@@ -47,10 +69,7 @@ class TodoList extends Component {
                     />
                     {item.text}
                     <span onClick={() => deleteTodo(key)}> X</span> |
-                    <span onClick={() => toggleBacklog(key)}>
-                      {" "}
-                      {isBacklog ? "⬅️" : "👉"}
-                    </span>
+                    <span onClick={() => toggleBacklog(key)}> {isBacklog ? <PointLeft /> : <PointRight />}</span>
                   </li>
                 );
               })}
@@ -84,9 +103,5 @@ const mapPropstoFirebase = (props, ref) => ({
 
 export default props => {
   const HOC = connect(mapPropstoFirebase)(TodoList);
-  return (
-    <CurrentDateContext>
-      {({ state }) => <HOC currentDate={state.currentDate} {...props} />}
-    </CurrentDateContext>
-  );
+  return <CurrentDateContext>{({ state }) => <HOC currentDate={state.currentDate} {...props} />}</CurrentDateContext>;
 };
