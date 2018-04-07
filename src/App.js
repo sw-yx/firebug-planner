@@ -19,6 +19,18 @@ const firebaseApp = initializeApp({
 });
 const firestore = firebase.firestore();
 
+class Timer extends Component {
+  state = {
+    now: new Date()
+  }
+  componentDidMount() {
+    setInterval(() => this.setState({now: new Date()}), 1000)
+  }
+  render() {
+    return <div className="App-Timer">Timer: {this.state.now.toLocaleTimeString()}</div>
+  }
+}
+
 class App extends Component {
   render() {
     return (
@@ -26,6 +38,7 @@ class App extends Component {
         <CurrentDateProvider>
           <div className="App">
             <header className="App-header">
+              <Timer />
               <h1 className="App-title">
                 <CurrentDateContext>
                   {({ state, handleDateChange }) =>
@@ -33,6 +46,8 @@ class App extends Component {
                   }
                 </CurrentDateContext>
               </h1>
+              <div className="App-search">searchbar</div>
+              <div>options</div>
             </header>
             <Main />
           </div>

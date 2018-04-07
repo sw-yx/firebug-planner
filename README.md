@@ -10,3 +10,5 @@ videos
   * Firebug 2 raw rehearsal https://www.youtube.com/watch?v=nvG8zm6cnfc
 * Firebug 3 https://www.youtube.com/watch?v=oWYGiBy6bug
   * Firebug 3 raw rehearsal https://www.youtube.com/watch?v=mMr64Lm3dR8
+* Firebug 4: CSS Day https://www.youtube.com/watch?v=4JhhyPhLbMI
+  * Firebug 4 raw rehearsal https://www.youtube.com/watch?v=4JhhyPhLbMI

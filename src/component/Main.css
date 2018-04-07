@@ -1,4 +1,42 @@
 .layout4 {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex: 1;
+}
+
+.layout4 > div:not(:last-child) {
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  border-right: 5px solid rgb(238, 238, 238);
+  flex: 1.25 1 0%;
+}
+
+.layout_Panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+.layout_Panel > h2 {
+  font-weight: 200;
+  font-size: 125%;
+  text-align: center;
+}
+.layout_body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout_body > h4 {
+  text-transform: uppercase;
+  font-size: 80%;
+  font-weight: 700;
+  color: #aaa;
+  text-align: center;
+  margin: 1em 0px;
+}
+.layout_footer {
+  display: flex;
 }

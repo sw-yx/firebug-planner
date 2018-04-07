@@ -1,6 +1,41 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { connect } from "react-firebase-firestore";
 import { CurrentDateContext } from "../CurrentDate";
+import "./Routine.css";
+
+function MinusButton() {
+  return (
+    <svg
+      fill="currentColor"
+      preserveAspectRatio="xMidYMid meet"
+      height="1em"
+      width="1em"
+      viewBox="0 0 40 40"
+      style={{ "vertical-align": "middle" }}
+    >
+      <g>
+        <path d="m28.4 21.6v-3.2h-16.8v3.2h16.8z m3.2-16.6q1.4 0 2.4 1t1 2.4v23.2q0 1.4-1 2.4t-2.4 1h-23.2q-1.4 0-2.4-1t-1-2.4v-23.2q0-1.4 1-2.4t2.4-1h23.2z" />
+      </g>
+    </svg>
+  );
+}
+
+function PlusButton() {
+  return (
+    <svg
+      fill="currentColor"
+      preserveAspectRatio="xMidYMid meet"
+      height="1em"
+      width="1em"
+      viewBox="0 0 40 40"
+      style={{ "vertical-align": "middle" }}
+    >
+      <g>
+        <path d="m28.4 21.6v-3.2h-6.8v-6.8h-3.2v6.8h-6.8v3.2h6.8v6.8h3.2v-6.8h6.8z m3.2-16.6c1.8 0 3.4 1.6 3.4 3.4v23.2c0 1.8-1.6 3.4-3.4 3.4h-23.2c-1.9 0-3.4-1.6-3.4-3.4v-23.2c0-1.8 1.5-3.4 3.4-3.4h23.2z" />
+      </g>
+    </svg>
+  );
+}
 
 function RoutineItem({
   routine,
@@ -26,18 +61,26 @@ function RoutineItem({
   };
 
   return (
-    <div>
-      {routine.title}
-      {checkBoxBoolArray.map((bool, idx) => (
-        <input
-          key={idx}
-          type="checkbox"
-          checked={bool}
-          onChange={() => modCheckbox(idx)}
-        />
-      ))}
-      <button onClick={decreaseFreq}>-</button>
-      <button onClick={increaseFreq}>+</button>
+    <div className="RoutineItem">
+      <div contentEditable className="RoutineItem_title">
+        {routine.title}
+      </div>
+      <div>
+        {checkBoxBoolArray.map((bool, idx) => (
+          <input
+            key={idx}
+            type="checkbox"
+            checked={bool}
+            onChange={() => modCheckbox(idx)}
+          />
+        ))}
+        <button onClick={decreaseFreq}>
+          <MinusButton />
+        </button>
+        <button onClick={increaseFreq}>
+          <PlusButton />
+        </button>
+      </div>
     </div>
   );
 }
@@ -50,14 +93,14 @@ function RoutineList(props) {
     e.target.newRoutine.value = "";
   };
   return (
-    <div>
+    <Fragment>
       {collection.map(routine => (
         <RoutineItem key={routine._id} routine={routine} {...props} />
       ))}
-      <form onSubmit={handleSubmit}>
+      {/* <form onSubmit={handleSubmit}>
         <input type="text" placeholder="be productive!" name="newRoutine" />
-      </form>
-    </div>
+      </form> */}
+    </Fragment>
   );
 }
 

@@ -1,0 +1,23 @@
+.RoutineItem {
+  flex: 1;
+  display: flex;
+}
+
+.RoutineItem button {
+  position: relative;
+  color: rgb(170, 170, 170);
+  outline: none;
+  border-width: initial;
+  border-style: none;
+  border-color: initial;
+  border-image: initial;
+  padding: 0px;
+  margin: 0px;
+  font: inherit;
+  background: none;
+}
+
+.RoutineItem_title {
+  outline: none;
+  flex: 1 1 0%;
+}
