@@ -5,19 +5,22 @@ export const CurrentDateContext = React.createContext();
 
 export default class CurrentDateProvider extends Component {
   state = {
-    currentDate: moment()
+    currentDate: moment(),
+    currentFocus: null
   };
   handleDateChange = date => {
     this.setState({
       currentDate: date
     });
   };
+  setFocus = key => this.setState({ currentFocus: key });
   render() {
     return (
       <CurrentDateContext.Provider
         value={{
           state: this.state,
-          handleDateChange: this.handleDateChange
+          handleDateChange: this.handleDateChange,
+          setCurrentFocus: this.setFocus
         }}
       >
         {this.props.children}

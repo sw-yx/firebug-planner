@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-firebase-firestore";
+import { CurrentDateContext } from "../CurrentDate";
 
 import TodoList from "./TodoList";
 import "./Main.css";
@@ -8,6 +10,7 @@ import Routine from "./Routine";
 import Button from "./Button";
 class Main extends Component {
   render() {
+    const { addRoutine, addNote, addTodo, addBacklogTodo } = this.props;
     return (
       <div className="layout4">
         <div className="layout_Panel">
@@ -19,8 +22,8 @@ class Main extends Component {
             <Routine isMonthly={false} />
           </div>
           <div className="layout_footer">
-            <Button label="+ Weekly" onClick={() => alert("hi")} />
-            <Button label="+ Monthly" onClick={() => alert("hi")} />
+            <Button label="+ Weekly" onClick={() => addRoutine("weeklyRoutines")} />
+            <Button label="+ Monthly" onClick={() => addRoutine("monthlyRoutines")} />
           </div>
         </div>
         <div className="layout_Panel">
@@ -29,8 +32,8 @@ class Main extends Component {
             <TodoList />
           </div>
           <div className="layout_footer">
-            <Button label="+ Todo" onClick={() => alert("hi")} />
-            <Button label="+ Note" onClick={() => alert("hi")} />
+            <Button label="+ Todo" onClick={() => addTodo("")} />
+            <Button label="+ Note" onClick={() => addNote("")} />
           </div>
         </div>
         <div className="layout_Panel">
@@ -40,7 +43,7 @@ class Main extends Component {
             <TodoList isBacklog />
           </div>
           <div className="layout_footer">
-            <Button label="+ Todo" onClick={() => alert("hi")} />
+            <Button label="+ Todo" onClick={() => addBacklogTodo("")} />
           </div>
         </div>
         <div className="layout_Panel">
@@ -52,4 +55,55 @@ class Main extends Component {
   }
 }
 
-export default Main;
+const mapPropstoFirebase = (props, ref) => ({
+  addRoutine: collectionName =>
+    ref(collectionName)
+      .add({
+        date: new Date(),
+        title: "",
+        frequency: 2,
+        completed: {}
+      })
+      .then(function(docRef) {
+        props.setCurrentFocus(docRef.id);
+      }),
+  addNote: value =>
+    ref("todo").add({
+      date: props.currentDate.toDate(),
+      text: value,
+      isComplete: false,
+      isNote: true
+    }),
+  addTodo: value =>
+    ref("todo").add({
+      date: props.currentDate.toDate(),
+      text: value,
+      isComplete: false,
+      isNote: false
+    }),
+  addBacklogTodo: value =>
+    ref("todo").add({
+      date: null,
+      text: value,
+      isComplete: false,
+      isNote: false
+    })
+});
+
+export default props => {
+  const HOC = connect(mapPropstoFirebase)(Main);
+  return (
+    <CurrentDateContext>
+      {({ state, setCurrentFocus }) => {
+        return (
+          <HOC
+            currentDate={state.currentDate}
+            currentFocus={state.currentFocus}
+            setCurrentFocus={setCurrentFocus}
+            {...props}
+          />
+        );
+      }}
+    </CurrentDateContext>
+  );
+};
