@@ -45,8 +45,7 @@ function RoutineItem({
   modifyCheckbox,
   editTitle,
   addRoutine,
-  deleteRoutine,
-  currentFocus
+  deleteRoutine
 }) {
   const checkBoxBoolArray = Array(routine.frequency)
     .fill()
@@ -62,24 +61,22 @@ function RoutineItem({
     newCompleted[idx] = !newCompleted[idx];
     modifyCheckbox(routine._id, newCompleted);
   };
-  const handleKeyUp = e => {
+  const handleKeyDown = e => {
     if (e.keyCode === 13 && e.metaKey) {
       e.preventDefault();
       addRoutine("");
-    } else if (e.keyCode === 8 && routine.title === "") {
+    } else if (e.keyCode === 8 && e.target.textContent.trim() === "") {
       deleteRoutine(routine._id);
     }
   };
-  // console.log("currentFocus", currentFocus, routine._id);
   return (
     <div className="RoutineItem">
       <ContentEditable
         className="RoutineItem_title"
         html={routine.title} // innerHTML of the editable div
         disabled={false} // use true to disable edition
-        onChange={e => editTitle(routine._id, e.target.value)} // handle innerHTML change
-        onKeyDown={handleKeyUp}
-        autoFocus={currentFocus === routine._id}
+        onChange={debounce(e => editTitle(routine._id, e.target.value), 1000)} // handle innerHTML change
+        onKeyDown={handleKeyDown}
       />
 
       <div>
@@ -119,7 +116,7 @@ const mapPropstoFirebase = (props, ref) => ({
         completed: {}
       })
       .then(function(docRef) {
-        props.setCurrentFocus(docRef.id);
+        return docRef.id;
       }),
   modifyFrequency: (key, newFrequency) =>
     ref(`${props.collectionName}/${key}`).update({
@@ -131,9 +128,11 @@ const mapPropstoFirebase = (props, ref) => ({
     }),
   deleteRoutine: key => ref(`${props.collectionName}/${key}`).delete(),
   editTitle: (key, newTitle) =>
-    ref(`${props.collectionName}/${key}`).update({
-      title: newTitle
-    })
+    ref(`${props.collectionName}/${key}`)
+      .update({
+        title: newTitle
+      })
+      .catch(() => {}) // silent fail in case its already deleted
 });
 
 export default props => {
@@ -145,8 +144,6 @@ export default props => {
         <HOC
           currentPeriod={dateToPeriod(state.currentDate.toDate(), props.isMonthly)}
           collectionName={collectionName}
-          currentFocus={state.currentFocus}
-          setCurrentFocus={state.setCurrentFocus}
           {...props}
         />
       )}
@@ -172,18 +169,14 @@ function getWeekNumber(d) {
   return "" + d.getUTCFullYear() + weekNo;
 }
 
-function debounce(func, wait, immediate) {
-  var timeout;
-  return function() {
-    var context = this,
-      args = arguments;
-    var later = function() {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    var callNow = immediate && !timeout;
+function debounce(fn, ms = 500) {
+  let timeout;
+
+  return event => {
     clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
+    event.persist();
+    timeout = setTimeout(() => {
+      fn(event);
+    }, ms);
   };
 }

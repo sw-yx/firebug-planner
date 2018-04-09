@@ -65,10 +65,11 @@ const mapPropstoFirebase = (props, ref) => ({
         completed: {}
       })
       .then(function(docRef) {
-        props.setCurrentFocus(docRef.id);
+        return docRef.id;
       }),
   addNote: value =>
     ref("todo").add({
+      dateCreated: new Date(),
       date: props.currentDate.toDate(),
       text: value,
       isComplete: false,
@@ -76,6 +77,7 @@ const mapPropstoFirebase = (props, ref) => ({
     }),
   addTodo: value =>
     ref("todo").add({
+      dateCreated: new Date(),
       date: props.currentDate.toDate(),
       text: value,
       isComplete: false,
@@ -83,6 +85,7 @@ const mapPropstoFirebase = (props, ref) => ({
     }),
   addBacklogTodo: value =>
     ref("todo").add({
+      dateCreated: new Date(),
       date: null,
       text: value,
       isComplete: false,
@@ -94,15 +97,8 @@ export default props => {
   const HOC = connect(mapPropstoFirebase)(Main);
   return (
     <CurrentDateContext>
-      {({ state, setCurrentFocus }) => {
-        return (
-          <HOC
-            currentDate={state.currentDate}
-            currentFocus={state.currentFocus}
-            setCurrentFocus={setCurrentFocus}
-            {...props}
-          />
-        );
+      {({ state }) => {
+        return <HOC currentDate={state.currentDate} {...props} />;
       }}
     </CurrentDateContext>
   );

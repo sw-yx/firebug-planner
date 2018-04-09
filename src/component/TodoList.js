@@ -17,7 +17,29 @@ class TodoList extends Component {
     e.target.newTodo.value = "";
   };
   render() {
-    const { value, todos, currentDate, isBacklog, deleteTodo, toggleBacklog, editTitle, checkItem } = this.props;
+    const {
+      value,
+      todos,
+      currentDate,
+      isBacklog,
+      addTodo,
+      addNote,
+      deleteTodo,
+      toggleBacklog,
+      editTitle,
+      checkItem
+    } = this.props;
+
+    const handleKeyDown = todo => e => {
+      if (e.keyCode === 13 && e.metaKey && e.shiftKey && !isBacklog) {
+        addNote("");
+      } else if (e.keyCode === 13 && e.metaKey && !e.shiftKey) {
+        e.preventDefault();
+        addTodo("");
+      } else if (e.keyCode === 8 && e.target.textContent.trim() === "") {
+        deleteTodo(todo._id);
+      }
+    };
     return (
       <div className="TodoList_Wrapper">
         {todos &&
@@ -28,6 +50,7 @@ class TodoList extends Component {
                   ? !item.date // only want those items with date = null
                   : compareDates(item.date, currentDate.toDate()) // match current date
             )
+            .sort((a, b) => a.dateCreated > b.dateCreated)
             .map(item => {
               const key = item._id;
               return (
@@ -49,7 +72,8 @@ class TodoList extends Component {
                   <ContentEditable
                     html={item.text} // innerHTML of the editable div
                     disabled={false} // use true to disable edition
-                    onChange={e => editTitle(key, e.target.value)} // handle innerHTML change
+                    onChange={debounce(e => editTitle(key, e.target.value), 1000)} // handle innerHTML change
+                    onKeyDown={handleKeyDown(item)}
                   />
                   {!isBacklog &&
                     !item.isNote && (
@@ -70,9 +94,18 @@ const mapPropstoFirebase = (props, ref) => ({
   todos: "todo",
   addTodo: value =>
     ref("todo").add({
+      dateCreated: new Date(),
       date: props.isBacklog ? null : props.currentDate.toDate(),
       text: value,
       isComplete: false
+    }),
+  addNote: value =>
+    ref("todo").add({
+      dateCreated: new Date(),
+      date: props.currentDate.toDate(),
+      text: value,
+      isComplete: false,
+      isNote: true
     }),
   deleteTodo: key => ref(`todo/${key}`).delete(),
   checkItem: (key, newCheckStatus) =>
@@ -132,4 +165,16 @@ function PointLeft(props) {
       </svg>
     </button>
   );
+}
+
+function debounce(fn, ms = 500) {
+  let timeout;
+
+  return event => {
+    clearTimeout(timeout);
+    event.persist();
+    timeout = setTimeout(() => {
+      fn(event);
+    }, ms);
+  };
 }
