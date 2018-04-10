@@ -22,12 +22,16 @@ const firestore = firebase.firestore();
 class Timer extends Component {
   state = {
     now: new Date()
-  }
+  };
   componentDidMount() {
-    setInterval(() => this.setState({now: new Date()}), 1000)
+    setInterval(() => this.setState({ now: new Date() }), 1000);
   }
   render() {
-    return <div className="App-Timer">Timer: {this.state.now.toLocaleTimeString()}</div>
+    return (
+      <div className="App-Timer">
+        Timer: {this.state.now.toLocaleTimeString()}
+      </div>
+    );
   }
 }
 
@@ -42,7 +46,7 @@ class App extends Component {
               <h1 className="App-title">
                 <CurrentDateContext>
                   {({ state, handleDateChange }) =>
-                    `today is ${state.currentDate.toDate().toDateString()}`
+                    `today is ${state.currentDate.toDateString()}`
                   }
                 </CurrentDateContext>
               </h1>

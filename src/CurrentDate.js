@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import moment from "moment";
 
 export const CurrentDateContext = React.createContext();
 
 export default class CurrentDateProvider extends Component {
   state = {
-    currentDate: moment()
+    currentDate: new Date()
   };
   handleDateChange = date => {
     this.setState({

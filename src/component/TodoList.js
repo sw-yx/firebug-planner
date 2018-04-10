@@ -48,7 +48,7 @@ class TodoList extends Component {
               item =>
                 isBacklog
                   ? !item.date // only want those items with date = null
-                  : compareDates(item.date, currentDate.toDate()) // match current date
+                  : compareDates(item.date, currentDate) // match current date
             )
             .sort((a, b) => a.dateCreated > b.dateCreated)
             .map(item => {
@@ -72,7 +72,10 @@ class TodoList extends Component {
                   <ContentEditable
                     html={item.text} // innerHTML of the editable div
                     disabled={false} // use true to disable edition
-                    onChange={debounce(e => editTitle(key, e.target.value), 1000)} // handle innerHTML change
+                    onChange={debounce(
+                      e => editTitle(key, e.target.value),
+                      1000
+                    )} // handle innerHTML change
                     onKeyDown={handleKeyDown(item)}
                   />
                   {!isBacklog &&
@@ -95,14 +98,14 @@ const mapPropstoFirebase = (props, ref) => ({
   addTodo: value =>
     ref("todo").add({
       dateCreated: new Date(),
-      date: props.isBacklog ? null : props.currentDate.toDate(),
+      date: props.isBacklog ? null : props.currentDate,
       text: value,
       isComplete: false
     }),
   addNote: value =>
     ref("todo").add({
       dateCreated: new Date(),
-      date: props.currentDate.toDate(),
+      date: props.currentDate,
       text: value,
       isComplete: false,
       isNote: true
@@ -114,7 +117,7 @@ const mapPropstoFirebase = (props, ref) => ({
     }),
   toggleBacklog: key =>
     ref(`todo/${key}`).update({
-      date: props.isBacklog ? props.currentDate.toDate() : null
+      date: props.isBacklog ? props.currentDate : null
     }),
   editTitle: (key, newTitle) =>
     ref(`todo/${key}`).update({
@@ -124,7 +127,11 @@ const mapPropstoFirebase = (props, ref) => ({
 
 export default props => {
   const HOC = connect(mapPropstoFirebase)(TodoList);
-  return <CurrentDateContext>{({ state }) => <HOC currentDate={state.currentDate} {...props} />}</CurrentDateContext>;
+  return (
+    <CurrentDateContext>
+      {({ state }) => <HOC currentDate={state.currentDate} {...props} />}
+    </CurrentDateContext>
+  );
 };
 
 // svg buttons

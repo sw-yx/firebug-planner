@@ -22,8 +22,14 @@ class Main extends Component {
             <Routine isMonthly={false} />
           </div>
           <div className="layout_footer">
-            <Button label="+ Weekly" onClick={() => addRoutine("weeklyRoutines")} />
-            <Button label="+ Monthly" onClick={() => addRoutine("monthlyRoutines")} />
+            <Button
+              label="+ Weekly"
+              onClick={() => addRoutine("weeklyRoutines")}
+            />
+            <Button
+              label="+ Monthly"
+              onClick={() => addRoutine("monthlyRoutines")}
+            />
           </div>
         </div>
         <div className="layout_Panel">
@@ -70,7 +76,7 @@ const mapPropstoFirebase = (props, ref) => ({
   addNote: value =>
     ref("todo").add({
       dateCreated: new Date(),
-      date: props.currentDate.toDate(),
+      date: props.currentDate,
       text: value,
       isComplete: false,
       isNote: true
@@ -78,7 +84,7 @@ const mapPropstoFirebase = (props, ref) => ({
   addTodo: value =>
     ref("todo").add({
       dateCreated: new Date(),
-      date: props.currentDate.toDate(),
+      date: props.currentDate,
       text: value,
       isComplete: false,
       isNote: false
