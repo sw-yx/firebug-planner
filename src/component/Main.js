@@ -5,7 +5,7 @@ import { CurrentDateContext } from "../CurrentDate";
 import TodoList from "./TodoList";
 import "./Main.css";
 
-import Calendar from "./Calendar";
+import { Calendar2 } from "./Calendar";
 import Routine from "./Routine";
 import Button from "./Button";
 class Main extends Component {
@@ -48,7 +48,7 @@ class Main extends Component {
         </div>
         <div className="layout_Panel">
           <h2>Calendar</h2>
-          <Calendar />
+          <Calendar2 />
         </div>
       </div>
     );
@@ -70,7 +70,7 @@ const mapPropstoFirebase = (props, ref) => ({
   addNote: value =>
     ref("todo").add({
       dateCreated: new Date(),
-      date: props.currentDate.toDate(),
+      date: props.currentDate,
       text: value,
       isComplete: false,
       isNote: true
@@ -78,7 +78,7 @@ const mapPropstoFirebase = (props, ref) => ({
   addTodo: value =>
     ref("todo").add({
       dateCreated: new Date(),
-      date: props.currentDate.toDate(),
+      date: props.currentDate,
       text: value,
       isComplete: false,
       isNote: false

@@ -142,7 +142,7 @@ export default props => {
     <CurrentDateContext>
       {({ state }) => (
         <HOC
-          currentPeriod={dateToPeriod(state.currentDate.toDate(), props.isMonthly)}
+          currentPeriod={dateToPeriod(state.currentDate, props.isMonthly)}
           collectionName={collectionName}
           {...props}
         />
