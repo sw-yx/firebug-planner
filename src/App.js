@@ -5,6 +5,8 @@ import "./App.css";
 import CurrentDateProvider, { CurrentDateContext } from "./CurrentDate";
 import Main from "./component/Main";
 
+import AuthProvider, { Auth } from "./Auth";
+
 var firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
@@ -18,43 +20,30 @@ const firebaseApp = initializeApp({
   messagingSenderId: "887774219647"
 });
 const firestore = firebase.firestore();
-
-class Timer extends Component {
-  state = {
-    now: new Date()
-  };
-  componentDidMount() {
-    setInterval(() => this.setState({ now: new Date() }), 1000);
-  }
-  render() {
-    return (
-      <div className="App-Timer">
-        Timer: {this.state.now.toLocaleTimeString()}
-      </div>
-    );
-  }
-}
+var provider = new firebase.auth.GoogleAuthProvider();
 
 class App extends Component {
   render() {
     return (
       <Provider firebaseApp={firebaseApp} firestore={firestore}>
         <CurrentDateProvider>
-          <div className="App">
-            <header className="App-header">
-              <Timer />
-              <h1 className="App-title">
-                <CurrentDateContext>
-                  {({ state, handleDateChange }) =>
-                    `today is ${state.currentDate.toDateString()}`
-                  }
-                </CurrentDateContext>
-              </h1>
-              <div className="App-search">searchbar</div>
-              <div>options</div>
-            </header>
-            <Main />
-          </div>
+          <AuthProvider firebase={firebase} provider={provider}>
+            <div className="App">
+              <header className="App-header">
+                <Auth provider={provider} firebase={firebase} />
+                <h1 className="App-title">
+                  <CurrentDateContext>
+                    {({ state, handleDateChange }) =>
+                      `today is ${state.currentDate.toDateString()}`
+                    }
+                  </CurrentDateContext>
+                </h1>
+                <div className="App-search">searchbar</div>
+                <div>options</div>
+              </header>
+              <Main />
+            </div>
+          </AuthProvider>
         </CurrentDateProvider>
       </Provider>
     );
