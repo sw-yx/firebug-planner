@@ -12,3 +12,6 @@ videos
   * Firebug 3 raw rehearsal https://www.youtube.com/watch?v=mMr64Lm3dR8
 * Firebug 4: CSS Day https://www.youtube.com/watch?v=4JhhyPhLbMI
   * Firebug 4 raw rehearsal https://www.youtube.com/watch?v=4JhhyPhLbMI
+* Firebug 5A: Calendar https://www.youtube.com/watch?v=CYGlwycPLpY
+* Firebug 5B: Firebase Authentication https://www.youtube.com/watch?v=AZWRbfTR_Qs
+  * Firebug 5 raw rehearsal https://www.youtube.com/watch?v=KT-S2IZIvvM
